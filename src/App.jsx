@@ -10,9 +10,9 @@ function App() {
   const linkedInUrl = 'https://www.linkedin.com/in/leo-gannad-a66a48410'
   const githubUrl = 'https://github.com/codedev-tech'
   const resumeUrl = '/Leo-Gannad-Resume.pdf'
-  const rootRef = useRef<HTMLDivElement | null>(null)
-  const nameContainerRef = useRef<HTMLDivElement | null>(null)
-  const actionsRef = useRef<HTMLDivElement | null>(null)
+  const rootRef = useRef(null)
+  const nameContainerRef = useRef(null)
+  const actionsRef = useRef(null)
   const [showActions, setShowActions] = useState(false)
 
   useEffect(() => {
@@ -121,8 +121,8 @@ function App() {
           <div className="flex items-center justify-between rounded-[26px] border border-white/10 bg-[#1b1724]/80 px-4 py-3 shadow-[0_18px_50px_rgba(0,0,0,0.32)] backdrop-blur-md sm:px-6">
             <div className="flex items-center gap-3">
               <div>
-                <p className=" text-sm font-semibold uppercase tracking-[0.22em] text-white/60">
-                  Portfolio
+                <p className=" text-sm font-semibold tracking-[0.22em] text-white/60">
+                  Coffee.dev
                 </p>
               </div>
             </div>
@@ -131,17 +131,11 @@ function App() {
               <a className="transition hover:text-white" href="#about">
                 About
               </a>
-              <a className="transition hover:text-white" href="#experience">
-                Experience
-              </a>
               <a className="transition hover:text-white" href="#skills">
                 Skills
               </a>
               <a className="transition hover:text-white" href="#certificate">
                 Certificate
-              </a>
-              <a className="transition hover:text-white" href="#projects">
-                Projects
               </a>
               <a className="transition hover:text-white" href="#contact">
                 Contact
@@ -153,7 +147,7 @@ function App() {
               download
               href={resumeUrl}
             >
-              Resume
+              CV
             </a>
           </div>
         </header>
@@ -181,7 +175,7 @@ function App() {
               </div>
 
               <p data-intro="title" className="mt-3 text-lg font-medium text-[#b6bfd0] sm:text-xl">
-                3rd Year BSIT
+                3rd Year BS Information Technology
               </p>
 
               <TextType

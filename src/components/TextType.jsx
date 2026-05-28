@@ -1,10 +1,5 @@
-'use client'
-
 import {
   createElement,
-  type ElementType,
-  type HTMLAttributes,
-  type ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -12,29 +7,6 @@ import {
   useState,
 } from 'react'
 import { gsap } from 'gsap'
-
-interface TextTypeProps {
-  className?: string
-  showCursor?: boolean
-  hideCursorWhileTyping?: boolean
-  cursorCharacter?: string | ReactNode
-  cursorBlinkDuration?: number
-  cursorClassName?: string
-  text: string | string[]
-  as?: ElementType
-  typingSpeed?: number
-  initialDelay?: number
-  pauseDuration?: number
-  deletingSpeed?: number
-  loop?: boolean
-  textColors?: string[]
-  variableSpeed?: { min: number; max: number }
-  onSentenceComplete?: (sentence: string, index: number) => void
-  onTypingComplete?: (sentence: string, index: number) => void
-  onTextUpdate?: (value: string, sentence: string, index: number) => void
-  startOnVisible?: boolean
-  reverseMode?: boolean
-}
 
 const TextType = ({
   text,
@@ -58,14 +30,14 @@ const TextType = ({
   startOnVisible = false,
   reverseMode = false,
   ...props
-}: TextTypeProps & HTMLAttributes<HTMLElement>) => {
+}) => {
   const [displayedText, setDisplayedText] = useState('')
   const [currentCharIndex, setCurrentCharIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
   const [currentTextIndex, setCurrentTextIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(!startOnVisible)
-  const cursorRef = useRef<HTMLSpanElement>(null)
-  const containerRef = useRef<HTMLElement>(null)
+  const cursorRef = useRef(null)
+  const containerRef = useRef(null)
   const typingCompletedRef = useRef(false)
 
   const textArray = useMemo(() => (Array.isArray(text) ? text : [text]), [text])
@@ -119,7 +91,7 @@ const TextType = ({
   useEffect(() => {
     if (!isVisible) return
 
-    let timeout: ReturnType<typeof setTimeout>
+    let timeout
 
     const currentText = textArray[currentTextIndex]
     const processedText = reverseMode ? currentText.split('').reverse().join('') : currentText

@@ -1,22 +1,7 @@
-import { type ReactNode, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 
-interface MagicCardProps {
-  children: ReactNode
-  className?: string
-  glowColor?: string
-  spotlightRadius?: number
-  particleCount?: number
-  enableTilt?: boolean
-  enableMagnetism?: boolean
-  enableBorderGlow?: boolean
-  enableSpotlight?: boolean
-  enableStars?: boolean
-  clickEffect?: boolean
-  disableAnimations?: boolean
-}
-
-const createParticleElement = (x: number, y: number, color: string) => {
+const createParticleElement = (x, y, color) => {
   const element = document.createElement('div')
   element.style.cssText = `
     position: absolute;
@@ -46,10 +31,10 @@ function MagicCard({
   enableStars = true,
   clickEffect = true,
   disableAnimations = false,
-}: MagicCardProps) {
-  const cardRef = useRef<HTMLDivElement | null>(null)
-  const particlesRef = useRef<HTMLDivElement[]>([])
-  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([])
+}) {
+  const cardRef = useRef(null)
+  const particlesRef = useRef([])
+  const timeoutsRef = useRef([])
   const isHoveredRef = useRef(false)
 
   const clearParticles = useCallback(() => {
@@ -145,7 +130,7 @@ function MagicCard({
     resetCard()
   }
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (event) => {
     if (disableAnimations || !cardRef.current) return
 
     const rect = cardRef.current.getBoundingClientRect()
@@ -160,7 +145,7 @@ function MagicCard({
     cardRef.current.style.setProperty('--glow-radius', `${spotlightRadius}px`)
 
     if (enableTilt || enableMagnetism) {
-      const nextProps: gsap.TweenVars = {
+      const nextProps = {
         duration: 0.2,
         ease: 'power2.out',
         transformPerspective: 1000,
@@ -180,7 +165,7 @@ function MagicCard({
     }
   }
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = (event) => {
     if (!clickEffect || disableAnimations || !cardRef.current) return
 
     const rect = cardRef.current.getBoundingClientRect()
@@ -230,14 +215,12 @@ function MagicCard({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
-      style={
-        {
-          '--glow-x': '50%',
-          '--glow-y': '50%',
-          '--glow-intensity': 0,
-          '--glow-radius': `${spotlightRadius}px`,
-        } as React.CSSProperties
-      }
+      style={{
+        '--glow-x': '50%',
+        '--glow-y': '50%',
+        '--glow-intensity': 0,
+        '--glow-radius': `${spotlightRadius}px`,
+      }}
     >
       {enableSpotlight && (
         <div

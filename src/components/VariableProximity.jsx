@@ -1,15 +1,12 @@
 import {
   createRef,
   forwardRef,
-  type CSSProperties,
-  type HTMLAttributes,
-  type MutableRefObject,
   useEffect,
   useMemo,
   useRef,
 } from 'react'
 
-function useAnimationFrame(callback: () => void) {
+function useAnimationFrame(callback) {
   useEffect(() => {
     let frameId = 0
 
@@ -24,11 +21,11 @@ function useAnimationFrame(callback: () => void) {
   }, [callback])
 }
 
-function useMousePositionRef(containerRef: MutableRefObject<HTMLElement | null>) {
+function useMousePositionRef(containerRef) {
   const positionRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
-    const updatePosition = (x: number, y: number) => {
+    const updatePosition = (x, y) => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect()
         positionRef.current = { x: x - rect.left, y: y - rect.top }
@@ -38,11 +35,11 @@ function useMousePositionRef(containerRef: MutableRefObject<HTMLElement | null>)
       positionRef.current = { x, y }
     }
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handleMouseMove = (event) => {
       updatePosition(event.clientX, event.clientY)
     }
 
-    const handleTouchMove = (event: TouchEvent) => {
+    const handleTouchMove = (event) => {
       const touch = event.touches[0]
       if (!touch) return
       updatePosition(touch.clientX, touch.clientY)
@@ -60,19 +57,7 @@ function useMousePositionRef(containerRef: MutableRefObject<HTMLElement | null>)
   return positionRef
 }
 
-interface VariableProximityProps extends HTMLAttributes<HTMLSpanElement> {
-  label: string
-  fromFontVariationSettings: string
-  toFontVariationSettings: string
-  containerRef: MutableRefObject<HTMLElement | null>
-  radius?: number
-  falloff?: 'linear' | 'exponential' | 'gaussian'
-  className?: string
-  onClick?: () => void
-  style?: CSSProperties
-}
-
-const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((props, ref) => {
+const VariableProximity = forwardRef((props, ref) => {
   const {
     label,
     fromFontVariationSettings,
@@ -87,7 +72,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
   } = props
 
   const mousePositionRef = useMousePositionRef(containerRef)
-  const lastPositionRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null })
+  const lastPositionRef = useRef({ x: null, y: null })
 
   const words = useMemo(() => {
     let nextLetterIndex = 0
@@ -105,13 +90,13 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
     () =>
       Array.from(
         { length: words.reduce((count, word) => count + word.letters.length, 0) },
-        () => createRef<HTMLSpanElement>(),
+        () => createRef(),
       ),
     [words],
   )
 
   const parsedSettings = useMemo(() => {
-    const parseSettings = (settingsString: string) =>
+    const parseSettings = (settingsString) =>
       new Map(
         settingsString
           .split(',')
@@ -132,10 +117,10 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
     }))
   }, [fromFontVariationSettings, toFontVariationSettings])
 
-  const calculateDistance = (x1: number, y1: number, x2: number, y2: number) =>
+  const calculateDistance = (x1, y1, x2, y2) =>
     Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
-  const calculateFalloff = (distance: number) => {
+  const calculateFalloff = (distance) => {
     const normalized = Math.min(Math.max(1 - distance / radius, 0), 1)
 
     switch (falloff) {
